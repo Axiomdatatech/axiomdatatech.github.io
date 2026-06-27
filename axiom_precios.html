@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Axiom Data Tech | Precios — Planes y Mantenimiento</title>
+<meta name="description" content="Planes de desarrollo web y mantenimiento mensual de Axiom Data Tech. Soluciones modernas, rápidas y orientadas a vender.">
+<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><defs><linearGradient id='g' x1='0' x2='1' y1='0' y2='1'><stop offset='0' stop-color='%237db0ff'/><stop offset='1' stop-color='%232f6fe0'/></linearGradient></defs><circle cx='32' cy='32' r='30' fill='none' stroke='url(%23g)' stroke-width='2'/><path d='M20 46 L32 18 L44 46 M25 38 H39' fill='none' stroke='url(%23g)' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:#04050a;color:#e8eaed;font-family:'DM Sans',system-ui,sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.shell{position:relative;background:radial-gradient(120% 80% at 50% -10%,#0a1430 0%,#05070e 45%,#04050a 100%);min-height:100vh;overflow:hidden}
+canvas#stars{position:fixed;inset:0;z-index:0;pointer-events:none}
+.layer{position:relative;z-index:1}
+
+/* ===== SPLASH ===== */
+.splash{position:fixed;inset:0;z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;background:radial-gradient(120% 80% at 50% -10%,#0a1430 0%,#05070e 45%,#04050a 100%);transition:opacity .7s ease,visibility .7s ease}
+.splash.hide{opacity:0;visibility:hidden;pointer-events:none}
+.splash-logo{position:relative;width:96px;height:96px;display:grid;place-items:center;animation:axSplashIn .9s ease both}
+.splash-logo svg{width:62px;height:62px;position:relative;z-index:2}
+.splash-logo::before{content:"";position:absolute;inset:-6px;border-radius:50%;border:1px solid rgba(255,255,255,.08);border-top-color:rgba(180,210,255,.7);animation:axSplashRing 1.2s linear infinite}
+.splash-logo::after{content:"";position:absolute;inset:-30px;border-radius:50%;background:radial-gradient(circle,rgba(120,170,255,.25),transparent 65%);filter:blur(10px);animation:axHalo 4s ease-in-out infinite}
+.splash-name{font-family:'Space Grotesk',sans-serif;font-weight:400;letter-spacing:.42em;font-size:22px;background:linear-gradient(110deg,#cfe0ff,#fff,#9fb4d6,#fff,#cfe0ff);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:axLiquid 8s linear infinite,axSplashIn 1s .15s ease both}
+.splash-sub{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.5em;color:#7e95c0;animation:axSplashIn 1s .25s ease both}
+.splash-bar{width:140px;height:2px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden;animation:axSplashIn 1s .35s ease both}
+.splash-bar i{display:block;width:40%;height:100%;background:linear-gradient(90deg,transparent,#7db0ff,transparent);animation:axSplashBar 1.3s ease-in-out infinite}
+
+/* ===== NAV ===== */
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:16px clamp(16px,4vw,52px);transition:background .35s ease,border-color .35s ease,backdrop-filter .35s ease;border-bottom:1px solid transparent}
+.nav.scrolled{background:rgba(5,7,14,.72);backdrop-filter:blur(16px) saturate(140%);-webkit-backdrop-filter:blur(16px) saturate(140%);border-bottom-color:rgba(255,255,255,.08)}
+.nav-brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+.nav-brand svg{width:30px;height:30px}
+.nav-brand span{font-family:'Space Grotesk',sans-serif;font-weight:500;letter-spacing:.34em;font-size:14px;color:#e8eaed}
+.nav-links{display:none;gap:30px;align-items:center}
+.nav-links a{color:#aab0bb;text-decoration:none;font-size:13px;letter-spacing:.04em;transition:color .3s}
+.nav-links a:hover{color:#fff}
+.nav-cta{display:inline-flex;align-items:center;gap:8px;padding:9px 18px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:#fff;text-decoration:none;font-size:13px;letter-spacing:.04em;transition:background .3s,transform .3s}
+.nav-cta:hover{background:rgba(120,170,255,.18);transform:translateY(-1px)}
+@media(min-width:880px){.nav-links{display:flex}}
+
+/* ===== HERO ===== */
+.hero{position:relative;min-height:100svh;display:grid;place-items:center;text-align:center;padding:120px clamp(20px,5vw,40px) 80px;overflow:hidden}
+.eclipse{position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);width:1500px;height:1500px;max-width:160vw;max-height:160vw;border-radius:50%;border:2px solid rgba(224,236,255,.95);box-shadow:0 0 120px rgba(120,170,255,.25),inset 0 0 90px rgba(120,170,255,.12),0 0 260px rgba(70,120,220,.18);pointer-events:none;z-index:0}
+.eclipse::after{content:"";position:absolute;top:6%;right:14%;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 0 30px rgba(255,255,255,.9),0 0 80px rgba(180,210,255,.6);animation:axHalo 4s ease-in-out infinite}
+.hero-inner{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:32px;max-width:1100px}
+.tag{display:inline-flex;align-items:center;gap:10px;padding:8px 16px;border-radius:999px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.22em;color:#9aa0ab;animation:axIn .9s ease both}
+.tag .dot{width:7px;height:7px;border-radius:50%;background:#7db0ff;box-shadow:0 0 12px #7db0ff;animation:axPulse 2s ease-in-out infinite}
+.hero h1{font-family:'Space Grotesk',sans-serif;font-weight:400;font-size:clamp(64px,15vw,200px);letter-spacing:.18em;line-height:1;background:linear-gradient(110deg,#cfe0ff,#ffffff,#9fb4d6,#ffffff,#dcebff,#cfe0ff,#ffffff,#9fb4d6);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 70px rgba(120,170,255,.35);animation:axLiquid 8s linear infinite,axIn 1s .1s ease both}
+.hero-sub{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.6em;color:#7e95c0;animation:axIn 1s .2s ease both}
+.hero p{font-size:clamp(17px,2.1vw,22px);font-weight:300;color:#c2c8d2;max-width:46ch;line-height:1.55;animation:axIn 1s .3s ease both}
+.hero p span{background:linear-gradient(90deg,#7db0ff,#a78bff,#5fe3f0);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:500;animation:axGrad 6s linear infinite}
+.cta-row{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;animation:axIn 1s .4s ease both}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:15px 32px;border-radius:999px;text-decoration:none;font-size:14px;letter-spacing:.05em;font-weight:500;transition:transform .3s,box-shadow .3s;cursor:pointer;border:0}
+.btn-primary{background:linear-gradient(180deg,#5b96ff,#2f6fe0);color:#fff;box-shadow:0 12px 32px -8px rgba(70,120,230,.55);animation:axGlow 4.5s ease-in-out infinite}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 18px 40px -8px rgba(70,120,230,.7)}
+.btn-glass{background:rgba(255,255,255,.03);color:#fff;border:1px solid rgba(255,255,255,.2);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.btn-glass:hover{background:rgba(255,255,255,.08);transform:translateY(-2px)}
+
+/* ===== SECTIONS ===== */
+.section{padding:clamp(70px,10vw,140px) clamp(20px,5vw,72px);position:relative;z-index:1}
+.section-head{max-width:880px;margin:0 auto 56px;text-align:center;display:flex;flex-direction:column;gap:16px;align-items:center}
+.section-tag{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.24em;color:#7db0ff}
+.section-title{font-family:'Space Grotesk',sans-serif;font-weight:500;font-size:clamp(30px,4.6vw,54px);letter-spacing:-.01em;line-height:1.1;background:linear-gradient(180deg,#fff,#9fb4d6);-webkit-background-clip:text;background-clip:text;color:transparent}
+.section-desc{font-size:clamp(15px,1.6vw,18px);color:#aab0bb;max-width:60ch;line-height:1.6;font-weight:300}
+
+/* ===== PRICING CARDS ===== */
+.plans-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:22px;max-width:1080px;margin:0 auto}
+.plan{position:relative;padding:32px 28px;border-radius:20px;border:1px solid rgba(255,255,255,.1);background:linear-gradient(160deg,rgba(120,160,255,.08),rgba(255,255,255,.012));backdrop-filter:blur(16px) saturate(120%);-webkit-backdrop-filter:blur(16px) saturate(120%);box-shadow:0 24px 60px -26px rgba(0,0,0,.85);transition:transform .4s ease,border-color .4s ease,box-shadow .4s ease;display:flex;flex-direction:column;gap:18px;animation:axFloat 9s ease-in-out infinite}
+.plan:nth-child(2){animation:axFloat 10s ease-in-out infinite -2.5s}
+.plan:hover{transform:translateY(-6px);border-color:rgba(120,170,255,.45);box-shadow:0 24px 60px -26px rgba(0,0,0,.85),0 0 50px rgba(90,150,255,.25)}
+.plan.featured{border-color:rgba(120,170,255,.45);box-shadow:0 24px 60px -26px rgba(0,0,0,.85),0 0 40px rgba(90,150,255,.2)}
+.plan .badge-off{position:absolute;top:18px;right:18px;padding:6px 12px;border-radius:999px;background:linear-gradient(90deg,#ff6b6b,#ff9544);color:#fff;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.05em;box-shadow:0 4px 14px -2px rgba(255,107,107,.5);animation:axPulse 2.4s ease-in-out infinite}
+.plan .badge-top{position:absolute;top:-12px;left:24px;padding:6px 14px;border-radius:999px;background:linear-gradient(90deg,#5b96ff,#a78bff);color:#fff;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.18em;box-shadow:0 6px 20px -4px rgba(91,150,255,.5)}
+.plan-icon{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;border:1px solid rgba(120,170,255,.4);background:rgba(120,170,255,.1);box-shadow:0 0 22px rgba(90,150,255,.2)}
+.plan-icon svg{width:24px;height:24px;color:#9fc4ff}
+.plan-title{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:21px;color:#fff;letter-spacing:.01em}
+.plan-subtitle{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;color:#7e95c0;margin-top:-12px}
+.plan-price{display:flex;flex-direction:column;gap:2px}
+.plan-price .old{font-size:15px;color:#6b7280;text-decoration:line-through;font-weight:400}
+.plan-price .now{font-family:'Space Grotesk',sans-serif;font-size:38px;font-weight:700;background:linear-gradient(120deg,#7db0ff,#a78bff);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1.05}
+.plan-price .per{font-size:13px;color:#9aa0ab;font-weight:400}
+.plan-features{list-style:none;display:flex;flex-direction:column;gap:10px;margin:6px 0;flex:1}
+.plan-features li{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:#c2c8d2;line-height:1.5}
+.plan-features li svg{flex-shrink:0;width:18px;height:18px;color:#7db0ff;margin-top:1px}
+.plan .btn{justify-content:center;margin-top:6px;padding:13px 24px;font-size:13px}
+
+/* ===== HOW WE WORK ===== */
+.how-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:22px;max-width:1080px;margin:0 auto}
+.how-card{padding:26px 24px;border-radius:18px;border:1px solid rgba(255,255,255,.08);background:linear-gradient(160deg,rgba(120,160,255,.05),rgba(255,255,255,.01));backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:border-color .3s,transform .3s}
+.how-card:hover{border-color:rgba(120,170,255,.3);transform:translateY(-3px)}
+.how-card .ic{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;border:1px solid rgba(120,170,255,.35);background:rgba(120,170,255,.08);margin-bottom:14px}
+.how-card .ic svg{width:18px;height:18px;color:#9fc4ff}
+.how-card h4{font-family:'Space Grotesk',sans-serif;font-weight:500;font-size:16px;color:#fff;margin-bottom:6px}
+.how-card p{font-size:13.5px;color:#aab0bb;line-height:1.55;font-weight:300}
+
+.note{max-width:780px;margin:48px auto 0;padding:22px 26px;border-radius:16px;border:1px solid rgba(120,170,255,.18);background:rgba(120,170,255,.04);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);font-size:14px;color:#c2c8d2;line-height:1.65;text-align:center;font-weight:300}
+.note strong{color:#9fc4ff;font-weight:500}
+
+/* ===== CONTACT ===== */
+.contact-grid{display:grid;grid-template-columns:1fr;gap:50px;max-width:1080px;margin:0 auto;align-items:start}
+@media(min-width:880px){.contact-grid{grid-template-columns:1fr 1fr;gap:80px}}
+.contact-info{display:flex;flex-direction:column;gap:18px}
+.contact-info .section-tag{text-align:left}
+.contact-info h2{font-family:'Space Grotesk',sans-serif;font-weight:500;font-size:clamp(28px,3.6vw,42px);background:linear-gradient(180deg,#fff,#9fb4d6);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1.1}
+.contact-info p{color:#aab0bb;line-height:1.6;font-weight:300}
+.contact-list{display:flex;flex-direction:column;gap:14px;margin-top:10px}
+.contact-list a{display:flex;align-items:center;gap:14px;text-decoration:none;color:#e8eaed;padding:12px 16px;border-radius:14px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.02);transition:border-color .3s,background .3s}
+.contact-list a:hover{border-color:rgba(120,170,255,.4);background:rgba(120,170,255,.06)}
+.contact-list .ic{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;border:1px solid rgba(120,170,255,.35);background:rgba(120,170,255,.08)}
+.contact-list .ic svg{width:16px;height:16px;color:#9fc4ff}
+.contact-list .lbl{display:flex;flex-direction:column}
+.contact-list .lbl small{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;color:#7e95c0;text-transform:uppercase}
+.contact-list .lbl span{font-size:14px;color:#e8eaed}
+
+.form{padding:34px 28px;border-radius:20px;border:1px solid rgba(255,255,255,.1);background:linear-gradient(160deg,rgba(120,160,255,.07),rgba(255,255,255,.012));backdrop-filter:blur(16px) saturate(120%);-webkit-backdrop-filter:blur(16px) saturate(120%);box-shadow:0 24px 60px -26px rgba(0,0,0,.85);display:flex;flex-direction:column;gap:16px}
+.form label{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;color:#7e95c0;text-transform:uppercase}
+.form input,.form textarea{width:100%;padding:13px 16px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);color:#e8eaed;font-family:inherit;font-size:14px;transition:border-color .3s,background .3s}
+.form input:focus,.form textarea:focus{outline:none;border-color:rgba(120,170,255,.45);background:rgba(120,170,255,.05)}
+.form textarea{min-height:110px;resize:vertical}
+.form .field{display:flex;flex-direction:column;gap:6px}
+.form .ok{padding:22px;border-radius:12px;border:1px solid rgba(120,170,255,.35);background:rgba(120,170,255,.08);color:#cfe0ff;text-align:center;font-size:14px;display:none}
+.form.sent .ok{display:block}
+.form.sent .field,.form.sent button{display:none}
+
+/* ===== FOOTER ===== */
+.footer{border-top:1px solid rgba(255,255,255,.07);padding:60px clamp(20px,5vw,72px) 30px;position:relative;z-index:1}
+.foot-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:40px;max-width:1100px;margin:0 auto}
+@media(max-width:760px){.foot-grid{grid-template-columns:1fr;gap:30px}}
+.foot-brand{display:flex;flex-direction:column;gap:14px}
+.foot-brand .nav-brand{margin-bottom:6px}
+.foot-brand p{font-size:13.5px;color:#9aa0ab;line-height:1.55;font-weight:300;max-width:34ch}
+.foot-col h5{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.22em;color:#7db0ff;margin-bottom:14px;text-transform:uppercase}
+.foot-col a{display:block;color:#aab0bb;text-decoration:none;font-size:13.5px;padding:5px 0;transition:color .3s}
+.foot-col a:hover{color:#fff}
+.foot-bottom{max-width:1100px;margin:40px auto 0;padding-top:24px;border-top:1px solid rgba(255,255,255,.05);display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;color:#6b7280;text-transform:uppercase}
+
+/* ===== FLOATING WHATSAPP ===== */
+.wa-float{position:fixed;bottom:24px;right:24px;z-index:40;width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,#25d366,#128c7e);display:grid;place-items:center;text-decoration:none;box-shadow:0 12px 30px -8px rgba(37,211,102,.55);transition:transform .3s;animation:axPulse 3s ease-in-out infinite}
+.wa-float:hover{transform:scale(1.08)}
+.wa-float svg{width:28px;height:28px;color:#fff}
+
+/* ===== REVEAL ===== */
+[data-reveal]{opacity:0;transform:translateY(40px);transition:opacity .9s ease,transform .9s ease}
+[data-reveal].in{opacity:1;transform:translateY(0)}
+
+/* ===== KEYFRAMES ===== */
+@keyframes axPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(.92)}}
+@keyframes axHalo{0%,100%{opacity:.7;transform:scale(1)}50%{opacity:1;transform:scale(1.08)}}
+@keyframes axFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes axGrad{0%{background-position:0% 50%}100%{background-position:200% 50%}}
+@keyframes axGlow{0%,100%{box-shadow:0 12px 32px -8px rgba(70,120,230,.55)}50%{box-shadow:0 16px 44px -8px rgba(120,170,255,.75)}}
+@keyframes axLiquid{0%{background-position:0% 50%}100%{background-position:300% 50%}}
+@keyframes axIn{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes axSplashIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes axSplashRing{to{transform:rotate(360deg)}}
+@keyframes axSplashBar{0%{transform:translateX(-100%)}100%{transform:translateX(350%)}}
+</style>
+</head>
+<body>
+
+<!-- LOGO SVG REUTILIZABLE -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="lgA" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#7db0ff"/>
+      <stop offset="1" stop-color="#2f6fe0"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<!-- SPLASH -->
+<div class="splash" id="splash">
+  <div class="splash-logo">
+    <svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="none" stroke="url(#lgA)" stroke-width="2"/><path d="M20 46 L32 18 L44 46 M25 38 H39" fill="none" stroke="url(#lgA)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div>
+  <div class="splash-name">AXIOM</div>
+  <div class="splash-sub">DATA TECH</div>
+  <div class="splash-bar"><i></i></div>
+</div>
+
+<!-- STARS CANVAS -->
+<canvas id="stars"></canvas>
+
+<div class="shell">
+<div class="layer">
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <a href="#" class="nav-brand">
+    <svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="none" stroke="url(#lgA)" stroke-width="2"/><path d="M20 46 L32 18 L44 46 M25 38 H39" fill="none" stroke="url(#lgA)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span>AXIOM</span>
+  </a>
+  <div class="nav-links">
+    <a href="#planes">Planes</a>
+    <a href="#mantenimiento">Mantenimiento</a>
+    <a href="#como">Cómo trabajamos</a>
+    <a href="#contacto">Contacto</a>
+  </div>
+  <a href="#contacto" class="nav-cta">Contactanos</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="eclipse"></div>
+  <div class="hero-inner">
+    <span class="tag"><span class="dot"></span>// PLANES DE DESARROLLO WEB + MANTENIMIENTO</span>
+    <h1>PRECIOS</h1>
+    <div class="hero-sub">PLANES Y MANTENIMIENTO</div>
+    <p>Soluciones web que <span>convierten visitas en ventas</span>. Sin programación, sin renta mensual atada, con soporte real.</p>
+    <div class="cta-row">
+      <a href="#planes" class="btn btn-primary">Ver Planes →</a>
+      <a href="https://wa.me/5492617553981" target="_blank" rel="noopener" class="btn btn-glass">WhatsApp</a>
+    </div>
+  </div>
+</section>
+
+<!-- PLANES WEB -->
+<section class="section" id="planes">
+  <div class="section-head" data-reveal>
+    <div class="section-tag">// DESARROLLO WEB · PAGO ÚNICO</div>
+    <h2 class="section-title">Planes web que se pagan solos</h2>
+    <p class="section-desc">Sitios profesionales, optimizados para ventas, listos en pocos días. Diseño, textos comerciales y capacitación incluidos.</p>
+  </div>
+
+  <div class="plans-grid">
+    <!-- PLAN BÁSICA -->
+    <div class="plan" data-reveal>
+      <span class="badge-off">33% OFF</span>
+      <div class="plan-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 9h18M7 14h6"/><path d="M9 21h6M12 18v3"/></svg>
+      </div>
+      <h3 class="plan-title">Plan Web Básica</h3>
+      <div class="plan-price">
+        <span class="old">AR$ 598.000</span>
+        <span class="now">AR$ 225.000</span>
+      </div>
+      <ul class="plan-features">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Diseño + armado del sitio</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Textos comerciales optimizados</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Botones de WhatsApp / contacto</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Secciones claras y orientadas a ventas</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Capacitación final</li>
+      </ul>
+      <a href="https://wa.me/5492617553981?text=Hola%20Axiom%2C%20me%20interesa%20el%20Plan%20Web%20B%C3%A1sica" target="_blank" rel="noopener" class="btn btn-glass">Quiero el Plan</a>
+    </div>
+
+    <!-- PLAN CARRITO -->
+    <div class="plan featured" data-reveal>
+      <span class="badge-top">MÁS VENDIDO</span>
+      <span class="badge-off">33% OFF</span>
+      <div class="plan-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.5"/><circle cx="17" cy="20" r="1.5"/><path d="M3 4h2l2.4 11.4a2 2 0 0 0 2 1.6h7.2a2 2 0 0 0 2-1.6L20 8H6"/></svg>
+      </div>
+      <h3 class="plan-title">Plan Carrito de Compras</h3>
+      <div class="plan-price">
+        <span class="old">AR$ 395.000</span>
+        <span class="now">AR$ 340.000</span>
+      </div>
+      <ul class="plan-features">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Diseño + armado del sitio</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Textos comerciales optimizados</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Botones de WhatsApp / contacto</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Secciones claras y orientadas a ventas</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Creación de la tienda con carrito</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Carga inicial de inventario</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Capacitación final</li>
+      </ul>
+      <a href="https://wa.me/5492617553981?text=Hola%20Axiom%2C%20me%20interesa%20el%20Plan%20Carrito%20de%20Compras" target="_blank" rel="noopener" class="btn btn-primary">Quiero el Plan</a>
+    </div>
+  </div>
+</section>
+
+<!-- MANTENIMIENTO -->
+<section class="section" id="mantenimiento">
+  <div class="section-head" data-reveal>
+    <div class="section-tag">// MANTENIMIENTO · MENSUAL</div>
+    <h2 class="section-title">Tu web siempre actualizada</h2>
+    <p class="section-desc">Olvidate de lo técnico. Nosotros mantenemos tu sitio activo, con contenido fresco y soporte real.</p>
+  </div>
+
+  <div class="plans-grid">
+    <!-- BÁSICO -->
+    <div class="plan" data-reveal>
+      <div class="plan-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3 1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8 1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg>
+      </div>
+      <h3 class="plan-title">Plan Básico</h3>
+      <div class="plan-price">
+        <span class="now">AR$ 35.000</span>
+        <span class="per">por mes</span>
+      </div>
+      <ul class="plan-features">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Hasta 2 cambios al mes</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Actualización de textos y precios</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Revisión general mensual</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Soporte por WhatsApp</li>
+      </ul>
+      <a href="https://wa.me/5492617553981?text=Hola%20Axiom%2C%20me%20interesa%20el%20Plan%20B%C3%A1sico%20de%20mantenimiento" target="_blank" rel="noopener" class="btn btn-glass">Quiero el Plan</a>
+    </div>
+
+    <!-- FULL -->
+    <div class="plan featured" data-reveal>
+      <span class="badge-top">OFERTA</span>
+      <div class="plan-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09Z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2Z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>
+      </div>
+      <h3 class="plan-title">Plan Full</h3>
+      <div class="plan-subtitle">// PARA WEBS CON CARRITO</div>
+      <div class="plan-price">
+        <span class="old">AR$ 55.000</span>
+        <span class="now">AR$ 35.000</span>
+        <span class="per">por mes</span>
+      </div>
+      <ul class="plan-features">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Cambios ilimitados razonables</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Nuevas secciones pequeñas</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Creación de banners</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Soporte por WhatsApp</li>
+      </ul>
+      <a href="https://wa.me/5492617553981?text=Hola%20Axiom%2C%20me%20interesa%20el%20Plan%20Full%20de%20mantenimiento" target="_blank" rel="noopener" class="btn btn-primary">Quiero el Plan</a>
+    </div>
+  </div>
+</section>
+
+<!-- COMO TRABAJAMOS -->
+<section class="section" id="como">
+  <div class="section-head" data-reveal>
+    <div class="section-tag">// CÓMO TRABAJAMOS</div>
+    <h2 class="section-title">Web moderna, rápida y sin programación</h2>
+    <p class="section-desc">Usamos herramientas modernas que nos permiten entregar sitios rápidos, accesibles y fáciles de actualizar. Nuestro enfoque está en que la web te genere resultados.</p>
+  </div>
+
+  <div class="how-grid">
+    <div class="how-card" data-reveal>
+      <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><circle cx="6" cy="6" r="2"/></svg></div>
+      <h4>Diseño adaptado a tu marca</h4>
+      <p>Identidad coherente, colores y tipografías cuidadas para transmitir lo que sos.</p>
+    </div>
+    <div class="how-card" data-reveal>
+      <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18"/></svg></div>
+      <h4>Optimizado mobile y SEO</h4>
+      <p>Tu sitio se ve perfecto en celular y está pensado para aparecer en Google.</p>
+    </div>
+    <div class="how-card" data-reveal>
+      <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
+      <h4>Capacitación incluida</h4>
+      <p>Te enseñamos a manejar tu web. Sos vos quien tiene el control.</p>
+    </div>
+    <div class="how-card" data-reveal>
+      <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></div>
+      <h4>Soporte cercano post-entrega</h4>
+      <p>No te quedás solo. Estamos para mantenerla viva y mejorarla mes a mes.</p>
+    </div>
+  </div>
+
+  <div class="note" data-reveal>
+    <strong>// Nota:</strong> Todos los sitios se crean con herramientas modernas que no requieren programación, permitiéndonos ofrecer una web rápida, accesible y fácil de actualizar. Nuestro enfoque está en que la web te genere resultados.
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section class="section" id="contacto">
+  <div class="contact-grid">
+    <div class="contact-info" data-reveal>
+      <div class="section-tag">// HABLEMOS</div>
+      <h2>¿Listo para tu web?</h2>
+      <p>Contanos qué necesitás. Te respondemos rápido, sin tecnicismos y con una propuesta clara.</p>
+      <div class="contact-list">
+        <a href="https://wa.me/5492617553981" target="_blank" rel="noopener">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4l-2.2-1c-.3-.1-.6 0-.8.2l-.9 1c-1.5-.8-2.7-2-3.5-3.5l1-.9c.2-.2.3-.5.2-.8l-1-2.2c-.2-.4-.6-.5-1-.4L7 7.3c-.4.1-.7.5-.6.9.4 4 3.5 7 7.5 7.5.4.1.8-.2.9-.6l.5-2.3c.1-.4-.1-.8-.4-1z"/></svg></span>
+          <span class="lbl"><small>WhatsApp</small><span>+54 9 2617 55-3981</span></span>
+        </a>
+        <a href="mailto:axiomdatatech@gmail.com">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><polyline points="3 7 12 13 21 7"/></svg></span>
+          <span class="lbl"><small>Email</small><span>axiomdatatech@gmail.com</span></span>
+        </a>
+        <a href="#" target="_blank" rel="noopener">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zM8.3 18H5.7V9.8h2.6V18zM7 8.6a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zM18.3 18h-2.6v-4.2c0-1-.4-1.7-1.3-1.7-.7 0-1.1.5-1.3 1-.1.2-.1.4-.1.7V18h-2.6V9.8h2.6v1.1c.4-.5 1-1.3 2.4-1.3 1.8 0 3 1.2 3 3.6V18z"/></svg></span>
+          <span class="lbl"><small>LinkedIn</small><span>/in/axiom-data-tech</span></span>
+        </a>
+      </div>
+    </div>
+
+    <form class="form" id="form" data-reveal>
+      <div class="field">
+        <label for="nombre">Nombre</label>
+        <input id="nombre" type="text" required placeholder="Tu nombre">
+      </div>
+      <div class="field">
+        <label for="email">Email o WhatsApp</label>
+        <input id="email" type="text" required placeholder="vos@ejemplo.com / +54 9 ...">
+      </div>
+      <div class="field">
+        <label for="msg">Mensaje</label>
+        <textarea id="msg" required placeholder="Contanos qué necesitás..."></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">Enviar mensaje →</button>
+      <div class="ok">✓ Gracias. Te respondemos a la brevedad.</div>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="foot-grid">
+    <div class="foot-brand">
+      <a href="#" class="nav-brand">
+        <svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="none" stroke="url(#lgA)" stroke-width="2"/><path d="M20 46 L32 18 L44 46 M25 38 H39" fill="none" stroke="url(#lgA)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>AXIOM DATA TECH</span>
+      </a>
+      <p>Soluciones que generan valor. Mendoza, Argentina — para todo el país.</p>
+    </div>
+    <div class="foot-col">
+      <h5>Navegar</h5>
+      <a href="#planes">Planes</a>
+      <a href="#mantenimiento">Mantenimiento</a>
+      <a href="#como">Cómo trabajamos</a>
+      <a href="#contacto">Contacto</a>
+    </div>
+    <div class="foot-col">
+      <h5>Contacto</h5>
+      <a href="mailto:axiomdatatech@gmail.com">axiomdatatech@gmail.com</a>
+      <a href="https://wa.me/5492617553981">+54 9 2617 55-3981</a>
+      <a href="#">LinkedIn</a>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>© 2026 AXIOM DATA TECH</span>
+    <span>// CONVERTIMOS DATOS EN VALOR OPERATIVO</span>
+  </div>
+</footer>
+
+</div>
+</div>
+
+<!-- WHATSAPP FLOAT -->
+<a href="https://wa.me/5492617553981" target="_blank" rel="noopener" class="wa-float" aria-label="WhatsApp">
+  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 3.5A11.9 11.9 0 0 0 12 0a12 12 0 0 0-10.4 18L0 24l6.2-1.6A12 12 0 0 0 24 12c0-3.2-1.2-6.2-3.5-8.5zM12 21.8a9.8 9.8 0 0 1-5-1.4l-.4-.2-3.7 1 1-3.6-.2-.4A9.8 9.8 0 1 1 21.8 12c0 5.4-4.4 9.8-9.8 9.8zm5.4-7.3c-.3-.2-1.8-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-1 1.2-.2.2-.4.2-.7.1-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6l.5-.6c.2-.2.2-.3.3-.5.1-.2.1-.4 0-.5l-.7-1.8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.4 0 1.4 1 2.7 1.2 2.9.1.2 2 3 4.7 4.2.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 2-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3z"/></svg>
+</a>
+
+<script>
+// ===== SPLASH =====
+setTimeout(()=>{document.getElementById('splash').classList.add('hide')},2400);
+
+// ===== STARS CANVAS =====
+const c=document.getElementById('stars'),ctx=c.getContext('2d');
+let stars=[],W=0,H=0;
+function resize(){W=c.width=innerWidth;H=c.height=innerHeight;stars=[];const n=Math.min(180,Math.floor((W*H)/9000));for(let i=0;i<n;i++)stars.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.3+.2,a:Math.random()*.7+.2,s:Math.random()*.02+.005,vy:Math.random()*.05+.01,p:Math.random()*Math.PI*2})}
+function draw(){ctx.clearRect(0,0,W,H);for(const s of stars){s.p+=s.s;s.y+=s.vy;if(s.y>H)s.y=0;const a=s.a*(0.6+0.4*Math.sin(s.p));ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle=`rgba(150,185,255,${a})`;ctx.fill()}requestAnimationFrame(draw)}
+addEventListener('resize',resize);resize();draw();
+
+// ===== NAV SCROLL =====
+const nav=document.getElementById('nav');
+addEventListener('scroll',()=>{nav.classList.toggle('scrolled',scrollY>30)},{passive:true});
+
+// ===== REVEAL =====
+const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('[data-reveal]').forEach(el=>io.observe(el));
+
+// ===== FORM =====
+document.getElementById('form').addEventListener('submit',e=>{e.preventDefault();e.currentTarget.classList.add('sent')});
+</script>
+</body>
+</html>
