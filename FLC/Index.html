@@ -4,20 +4,15 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Farmacia Las Compuertas | Luján de Cuyo, Mendoza</title>
-<meta name="description" content="Farmacia Las Compuertas - Salud, cuidado y bienestar en Las Compuertas, Luján de Cuyo. Medicamentos, perfumería, dermocosmética y mucho más." />
+<meta name="description" content="Farmacia Las Compuertas - Salud, cuidado y bienestar en Las Compuertas, Luján de Cuyo." />
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2064%2064%27%3E%3Ccircle%20cx%3D%2732%27%20cy%3D%2732%27%20r%3D%2730%27%20fill%3D%27%23fff%27%20stroke%3D%27%232BA8A8%27%20stroke-width%3D%273%27/%3E%3Crect%20x%3D%2726%27%20y%3D%2710%27%20width%3D%2712%27%20height%3D%2744%27%20rx%3D%271%27%20fill%3D%27%23BFDADA%27%20stroke%3D%27%232BA8A8%27%20stroke-width%3D%271%27/%3E%3Crect%20x%3D%2710%27%20y%3D%2726%27%20width%3D%2744%27%20height%3D%2712%27%20rx%3D%271%27%20fill%3D%27%23BFDADA%27%20stroke%3D%27%232BA8A8%27%20stroke-width%3D%271%27/%3E%3C/svg%3E" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 <style>
   :root{
-    --teal-dark:#1f3a3a;
-    --teal:#2BA8A8;
-    --teal-light:#4FB8B8;
-    --cyan-soft:#D9ECEC;
-    --bg:#ffffff;
-    --text:#1f3a3a;
-    --muted:#5d7a7a;
+    --teal-dark:#1f3a3a; --teal:#2BA8A8; --teal-light:#4FB8B8;
+    --cyan-soft:#D9ECEC; --bg:#ffffff; --text:#1f3a3a; --muted:#5d7a7a;
     --shadow:0 6px 20px rgba(43,168,168,.15);
     --shadow-strong:0 10px 30px rgba(31,58,58,.18);
     --radius:16px;
@@ -28,11 +23,9 @@
   img,svg{max-width:100%;display:block;}
   a{color:var(--teal);text-decoration:none;transition:color .2s;}
   a:hover{color:var(--teal-dark);}
-
   .logo-svg{display:block;}
   .logo-svg.circle{border-radius:50%;background:#fff;}
 
-  /* NAVBAR */
   header.navbar{position:sticky;top:0;z-index:1000;background:rgba(255,255,255,.95);backdrop-filter:blur(8px);box-shadow:0 2px 10px rgba(0,0,0,.05);}
   .nav-container{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:.8rem 1.5rem;}
   .nav-brand{display:flex;align-items:center;gap:.7rem;}
@@ -44,7 +37,6 @@
   .nav-links a:hover::after{width:100%;}
   .menu-toggle{display:none;background:none;border:none;font-size:1.6rem;color:var(--teal-dark);cursor:pointer;}
 
-  /* HERO */
   .hero{background:linear-gradient(135deg,var(--cyan-soft) 0%, #ffffff 70%);padding:4rem 1.5rem 5rem;text-align:center;position:relative;overflow:hidden;}
   .hero::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:60px;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 60' preserveAspectRatio='none'><path d='M0,30 Q300,0 600,30 T1200,30 L1200,60 L0,60 Z' fill='%23ffffff'/></svg>") no-repeat center/cover;}
   .hero .logo-svg{width:220px;height:220px;margin:0 auto 1.5rem;box-shadow:var(--shadow-strong);padding:6px;}
@@ -53,21 +45,18 @@
   .btn{display:inline-block;background:var(--teal);color:#fff;padding:.85rem 2rem;border-radius:50px;font-weight:600;box-shadow:var(--shadow);transition:transform .2s, background .2s;}
   .btn:hover{background:var(--teal-dark);color:#fff;transform:translateY(-2px);}
 
-  /* SECTIONS */
   section{padding:4.5rem 1.5rem;}
   .container{max-width:1200px;margin:0 auto;}
   .section-title{text-align:center;font-size:2rem;color:var(--teal-dark);margin-bottom:.6rem;font-weight:700;}
   .section-subtitle{text-align:center;color:var(--muted);margin-bottom:3rem;max-width:680px;margin-left:auto;margin-right:auto;}
   .cross-accent{color:var(--teal);font-weight:700;}
 
-  /* NOSOTROS */
   #nosotros{background:#fff;}
   .nosotros-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;}
   .nosotros-text p{margin-bottom:1rem;color:var(--muted);}
   .nosotros-img{background:var(--cyan-soft);border-radius:var(--radius);aspect-ratio:1;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow);}
   .nosotros-img .logo-svg{width:75%;height:75%;}
 
-  /* SERVICIOS */
   #servicios{background:var(--cyan-soft);}
   .services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem;}
   .service-card{background:#fff;border-radius:var(--radius);padding:2rem 1.5rem;text-align:center;box-shadow:var(--shadow);transition:transform .3s,box-shadow .3s;}
@@ -76,7 +65,6 @@
   .service-card h3{color:var(--teal-dark);margin-bottom:.5rem;font-size:1.1rem;}
   .service-card p{color:var(--muted);font-size:.92rem;}
 
-  /* PERFUMERIA */
   #perfumeria{background:#fff;}
   .perf-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;}
   .perf-card{background:#fff;border:1px solid var(--cyan-soft);border-radius:var(--radius);padding:1.6rem;transition:transform .3s,box-shadow .3s,border-color .3s;}
@@ -86,12 +74,10 @@
   .perf-card p{color:var(--muted);font-size:.9rem;}
   .perf-notice{margin-top:2.5rem;text-align:center;background:var(--cyan-soft);padding:1.2rem;border-radius:var(--radius);color:var(--teal-dark);font-weight:500;}
 
-  /* UBICACION */
   #ubicacion{background:var(--cyan-soft);}
   .map-wrapper{border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-strong);aspect-ratio:16/9;max-width:1000px;margin:0 auto;}
   .map-wrapper iframe{width:100%;height:100%;border:0;}
 
-  /* CONTACTO */
   #contacto{background:#fff;}
   .contact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem;}
   .contact-card{background:linear-gradient(135deg,var(--teal) 0%, var(--teal-light) 100%);color:#fff;padding:2rem;border-radius:var(--radius);box-shadow:var(--shadow);}
@@ -100,7 +86,6 @@
   .contact-card p, .contact-card a{color:#fff;opacity:.95;font-size:.95rem;}
   .contact-card a:hover{opacity:1;text-decoration:underline;}
 
-  /* FOOTER */
   footer{background:var(--teal-dark);color:#cfe5e5;padding:2.5rem 1.5rem 1.5rem;text-align:center;}
   footer .footer-brand{display:flex;align-items:center;justify-content:center;gap:.8rem;margin-bottom:1rem;}
   footer .footer-brand .logo-svg{width:54px;height:54px;background:#fff;border-radius:50%;}
@@ -128,18 +113,16 @@
     <!-- Fondo blanco interior -->
     <circle cx="100" cy="100" r="96" fill="#ffffff"/>
 
-    <!-- Anillo exterior teal grueso -->
+    <!-- Anillo exterior teal -->
     <circle cx="100" cy="100" r="93" fill="none" stroke="#2BA8A8" stroke-width="6"/>
 
-    <!-- Cruz médica (light cyan con borde teal) -->
+    <!-- Cruz médica -->
     <g fill="#BFDADA" stroke="#2BA8A8" stroke-width="1.2">
-      <!-- Vertical -->
       <rect x="78" y="22"  width="44" height="146" rx="2"/>
-      <!-- Horizontal -->
       <rect x="30" y="70"  width="140" height="44" rx="2"/>
     </g>
 
-    <!-- Swoosh principal: curva pincelada que arquea sobre la cruz -->
+    <!-- Swoosh: pincelada curva sobre la cruz -->
     <path d="M150 38
              C 130 58, 110 58, 95 70
              C 80 82, 70 100, 75 130
@@ -147,40 +130,29 @@
              C 85 50, 115 38, 150 38 Z"
           fill="#2BA8A8" opacity="0.85"/>
 
-    <!-- Dos paréntesis decorativos a la izquierda -->
+    <!-- Paréntesis decorativos a la izquierda -->
     <path d="M58 70 Q 48 100 62 138" fill="none" stroke="#2BA8A8" stroke-width="3" stroke-linecap="round"/>
     <path d="M70 72 Q 60 100 72 132" fill="none" stroke="#2BA8A8" stroke-width="2.5" stroke-linecap="round"/>
 
-    <!-- Texto FARMACIA -->
-    <text x="103" y="93" text-anchor="middle"
+    <!-- TEXTO: FARMACIA (línea 1) -->
+    <text x="100" y="92" text-anchor="middle"
           font-family="Georgia, 'Times New Roman', serif"
           font-weight="700" font-size="17" fill="#1f3a3a"
           letter-spacing="0.5">FARMACIA</text>
 
-    <!-- LAS pequeño con subrayado, a la izquierda de COMPUERTAS -->
-    <g>
-      <text x="82" y="113" text-anchor="middle"
-            font-family="Georgia, serif" font-weight="700"
-            font-size="7" fill="#1f3a3a" letter-spacing="0.3">LAS</text>
-      <line x1="76" y1="115.5" x2="88" y2="115.5"
-            stroke="#1f3a3a" stroke-width="0.7"/>
-    </g>
-
-    <!-- Texto COMPUERTAS -->
-    <text x="115" y="116" text-anchor="middle"
+    <!-- TEXTO: LAS COMPUERTAS (línea 2) — "LAS" pequeño con subrayado -->
+    <text x="100" y="113" text-anchor="middle"
           font-family="Georgia, 'Times New Roman', serif"
-          font-weight="700" font-size="16" fill="#1f3a3a"
-          letter-spacing="0.4">COMPUERTAS</text>
+          font-weight="700" fill="#1f3a3a">
+      <tspan font-size="8" text-decoration="underline" letter-spacing="0.2">LAS</tspan>
+      <tspan font-size="15" dx="3" letter-spacing="0.4">COMPUERTAS</tspan>
+    </text>
 
-    <!-- Montañas: contorno teal, sin relleno, con líneas de detalle -->
+    <!-- Montañas -->
     <g fill="none" stroke="#2BA8A8" stroke-width="2" stroke-linejoin="round" stroke-linecap="round">
-      <!-- Montaña trasera izquierda -->
       <path d="M32 168 L60 142 L78 160"/>
-      <!-- Montaña central (la más grande) -->
       <path d="M55 168 L92 130 L120 160 L138 145 L155 168"/>
-      <!-- Montaña trasera derecha -->
       <path d="M125 168 L150 142 L170 158"/>
-      <!-- Líneas de detalle interno -->
       <path d="M92 130 L100 148"/>
       <path d="M120 160 L128 152"/>
       <path d="M60 142 L70 155"/>
@@ -190,7 +162,6 @@
 </svg>
 
 
-<!-- NAVBAR -->
 <header class="navbar">
   <div class="nav-container">
     <div class="nav-brand">
@@ -209,7 +180,6 @@
   </div>
 </header>
 
-<!-- HERO -->
 <section id="inicio" class="hero">
   <svg class="logo-svg circle" viewBox="0 0 200 200" aria-label="Logo Farmacia Las Compuertas"><use href="#logo-flc"/></svg>
   <h1>Farmacia Las Compuertas</h1>
@@ -217,7 +187,6 @@
   <a href="#contacto" class="btn">Contactanos</a>
 </section>
 
-<!-- NOSOTROS -->
 <section id="nosotros">
   <div class="container">
     <h2 class="section-title">Sobre <span class="cross-accent">Nosotros</span></h2>
@@ -235,7 +204,6 @@
   </div>
 </section>
 
-<!-- SERVICIOS -->
 <section id="servicios">
   <div class="container">
     <h2 class="section-title">Nuestros <span class="cross-accent">Servicios</span></h2>
@@ -251,7 +219,6 @@
   </div>
 </section>
 
-<!-- PERFUMERIA -->
 <section id="perfumeria">
   <div class="container">
     <h2 class="section-title">Productos de <span class="cross-accent">Perfumería</span></h2>
@@ -280,7 +247,6 @@
   </div>
 </section>
 
-<!-- UBICACION -->
 <section id="ubicacion">
   <div class="container">
     <h2 class="section-title">¿Dónde <span class="cross-accent">Estamos</span>?</h2>
@@ -293,7 +259,6 @@
   </div>
 </section>
 
-<!-- CONTACTO -->
 <section id="contacto">
   <div class="container">
     <h2 class="section-title">Contacto</h2>
@@ -315,7 +280,6 @@
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer>
   <div class="footer-brand">
     <svg class="logo-svg" viewBox="0 0 200 200"><use href="#logo-flc"/></svg>
